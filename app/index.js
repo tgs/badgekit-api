@@ -23,6 +23,12 @@ server.use(middleware.verifyRequest())
 server.use(middleware.attachResolvePath())
 server.use(middleware.attachErrorLogger())
 
+server.on('after', function (req, res, route, err) {
+  var latency = Date.now() - req.time();
+  console.log('%s %s %s %sms - %s', req.method, req.url, res.statusCode, latency,
+    res.get('Content-Length'));
+});
+
 applyRoutes(server);
 
 module.exports = server;
